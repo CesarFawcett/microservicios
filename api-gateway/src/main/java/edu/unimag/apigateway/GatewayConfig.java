@@ -9,15 +9,19 @@ import org.springframework.context.annotation.Configuration;
 public class GatewayConfig {
 
     @Bean
-    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+    public RouteLocator customRouteLocator(RouteLocatorBuilder builder, CorrelationIdFilter correlationIdFilter) {
         return builder.routes()
                 .route("inventory-service", r -> r.path("/api/inventory/**")
+                        .filters(f -> f.filter(correlationIdFilter.apply(new CorrelationIdFilter.Config())))
                         .uri("lb://inventory-service"))
                 .route("order-service", r -> r.path("/api/order/**")
+                        .filters(f -> f.filter(correlationIdFilter.apply(new CorrelationIdFilter.Config())))
                         .uri("lb://order-service"))
                 .route("payment-service", r -> r.path("/api/payment/**")
+                        .filters(f -> f.filter(correlationIdFilter.apply(new CorrelationIdFilter.Config())))
                         .uri("lb://payment-service"))
                 .route("product-service", r -> r.path("/api/product/**")
+                        .filters(f -> f.filter(correlationIdFilter.apply(new CorrelationIdFilter.Config())))
                         .uri("lb://product-service"))
                 .build();
     }
