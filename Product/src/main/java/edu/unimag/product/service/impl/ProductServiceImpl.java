@@ -4,6 +4,7 @@ import edu.unimag.product.model.Product;
 import edu.unimag.product.repository.ProductRepository;
 import edu.unimag.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
+    @CacheEvict(value = "products", allEntries = true)
     public Product createProduct(Product product) {
         product.setCreatedAt(new Date());
         product.setUpdatedAt(new Date());
@@ -36,6 +38,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "products", allEntries = true)
     public Product updateProduct(String id, Product productDetails) {
         // Buscar el producto por ID
         Product product = productRepository.findById(id)
@@ -52,6 +55,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "products", allEntries = true)
     public void deleteProduct(String id) {
         productRepository.deleteById(id); // Llama al método deleteById del repositorio
     }
