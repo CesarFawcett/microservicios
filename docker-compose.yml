@@ -136,12 +136,13 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: 123
     ports:
-      - "5434:5432"  # Diferente puerto externo
+      - "5434:5432" 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U user -d paymentdb"]
       interval: 5s
       timeout: 5s
       retries: 5
+      start_period: 30s
     networks:
       - microservices-net
 
@@ -191,6 +192,7 @@ services:
       timeout: 10s
       retries: 5
       start_period: 20s
+
 
 volumes:
   order_pgdata:
