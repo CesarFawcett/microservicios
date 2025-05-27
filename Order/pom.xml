@@ -93,6 +93,33 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- observabilida para monitoreo -->
+        <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-bom</artifactId>
+        <version>1.37.0</version> <type>pom</type>
+        <scope>import</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-sdk</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-exporter-zipkin</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-tracing-bridge-otel</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-observation</artifactId>
+    </dependency>
     </dependencies>
 
     <build>
