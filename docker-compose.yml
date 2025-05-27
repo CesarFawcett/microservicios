@@ -32,6 +32,20 @@ services:
     networks:
       - microservices-net
 
+   # Redis Service
+  redis:
+    image: redis:6-alpine # O cualquier imagen de Redis que prefieras
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - microservices-net
+
   # Inventory Service
   inventory-service:
     image: inventory-service
@@ -144,6 +158,8 @@ services:
       eureka-server:
         condition: service_healthy
       mongo:
+        condition: service_healthy
+      redis: 
         condition: service_healthy
     networks:
       - microservices-net

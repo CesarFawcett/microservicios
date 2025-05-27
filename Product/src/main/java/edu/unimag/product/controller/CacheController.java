@@ -1,6 +1,10 @@
+// product/src/main/java/edu/unimag/product/controller/CacheController.java
+
 package edu.unimag.product.controller;
 
-import com.github.benmanes.caffeine.cache.stats.CacheStats;
+// Elimina esta importación de Caffeine, ya no es necesaria
+// import com.github.benmanes.caffeine.cache.stats.CacheStats;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -9,36 +13,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cache")
+@RequestMapping("/api/cache") 
 public class CacheController {
 
     @Autowired
-    private CacheManager cacheManager;  // Inyecta el CacheManager
+    private CacheManager cacheManager;
 
     @GetMapping("/stats")
     public String getCacheStats() {
-        // Obtiene el caché por su nombre (ej: "payments")
-        Cache cache = cacheManager.getCache("products");
+        Cache cache = cacheManager.getCache("products"); 
 
         if (cache == null) {
-            return "Caché no encontrado. Verifica el nombre.";
+            return "Caché 'products' no encontrado. Verifica el nombre en tu CacheConfig.";
         }
 
-        // Convierte el caché nativo de Caffeine para acceder a las estadísticas
-        com.github.benmanes.caffeine.cache.Cache<Object, Object> caffeineCache =
-                (com.github.benmanes.caffeine.cache.Cache<Object, Object>) cache.getNativeCache();
+        return "Caché 'products' está configurado y usa Redis. Las estadísticas detalladas deben consultarse directamente en el servidor Redis.";
+    }
 
-        CacheStats stats = caffeineCache.stats();
-        return String.format(
-                "Estadísticas del Caché 'products':<br>" +
-                        "• Hits (éxitos): %d<br>" +
-                        "• Misses (fallos): %d<br>" +
-                        "• Evictions (eliminaciones): %d<br>" +
-                        "• Tiempo promedio de carga: %.2f ms",
-                stats.hitCount(),
-                stats.missCount(),
-                stats.evictionCount(),
-                stats.averageLoadPenalty() / 1_000_000.0  // Convierte nanosegundos a milisegundos
-        );
+    // Opcional: Un endpoint para limpiar la caché manualmente (útil para pruebas)
+    @GetMapping("/clear")
+    public String clearCache() {
+        Cache cache = cacheManager.getCache("products");
+        if (cache != null) {
+            cache.clear(); // Limpia la caché "products"
+            return "Caché 'products' ha sido limpiado con éxito.";
+        }
+        return "Caché 'products' no encontrado para limpiar.";
     }
 }
