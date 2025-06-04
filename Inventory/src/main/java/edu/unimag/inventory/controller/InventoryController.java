@@ -16,9 +16,9 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 public class InventoryController {
 
+    @Autowired
     private final InventoryService inventoryService;
 
-    @Autowired
     public InventoryController(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }

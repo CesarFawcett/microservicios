@@ -5,7 +5,6 @@ import edu.unimag.inventory.model.InventoryStatus;
 import edu.unimag.inventory.repository.InventoryRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry; 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient; 
 
@@ -17,9 +16,8 @@ import java.util.UUID;
 public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository inventoryRepository;
-    private final WebClient webClient; // Inyectar WebClient
+    private final WebClient webClient; 
 
-    @Autowired
     public InventoryServiceImpl(InventoryRepository inventoryRepository, WebClient.Builder webClientBuilder) {
         this.inventoryRepository = inventoryRepository;
         this.webClient = webClientBuilder.baseUrl("http://localhost:9999/mock-audit").build(); 

@@ -4,8 +4,6 @@ import edu.unimag.product.model.Product;
 import edu.unimag.product.repository.ProductRepository;
 import edu.unimag.product.service.ProductService;
 import edu.unimag.product.service.config.CacheConfig;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,8 +16,11 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    @Autowired
     private ProductRepository productRepository;
+    
+     public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @Override
     @CacheEvict(value = CacheConfig.PRODUCT_CACHE, allEntries = true)

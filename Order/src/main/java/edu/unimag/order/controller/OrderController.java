@@ -16,9 +16,9 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 public class OrderController {
 
+    @Autowired
     private final OrderService orderService;
 
-    @Autowired
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }

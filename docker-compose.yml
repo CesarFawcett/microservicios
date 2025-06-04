@@ -32,6 +32,7 @@ services:
     networks:
       - microservices-net
 
+
    # Redis Service
   redis:
     image: redis:6-alpine # O cualquier imagen de Redis que prefieras
@@ -43,6 +44,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     networks:
       - microservices-net
 
@@ -76,6 +78,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+      start_period: 30s
     networks:
       - microservices-net
 
@@ -109,6 +112,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+      start_period: 30s
     networks:
       - microservices-net
 
@@ -177,6 +181,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+      start_period: 30s
     networks:
       - microservices-net
 

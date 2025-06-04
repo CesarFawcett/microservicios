@@ -15,9 +15,9 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 public class PaymentController {
 
+    @Autowired
     private final PaymentService paymentService;
 
-    @Autowired
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
     }

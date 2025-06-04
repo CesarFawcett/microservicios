@@ -71,15 +71,6 @@ public class OrderControllerIntegrationTest {
         assertThat(response.getBody().getId()).isNotNull();
     }
 
-//    @Test
-//    public void testGetOrderById() {
-//        ResponseEntity<Order> response = restTemplate.getForEntity("/api/orders/" + order.getId(), Order.class);
-//
-//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-//        assertThat(response.getBody()).isNotNull();
-//        assertThat(response.getBody().getId()).isEqualTo(order.getId());
-//    }
-
     @Test
     public void testGetOrderById_NotFound() {
         ResponseEntity<Order> response = restTemplate.getForEntity("/api/order/" + UUID.randomUUID(), Order.class);

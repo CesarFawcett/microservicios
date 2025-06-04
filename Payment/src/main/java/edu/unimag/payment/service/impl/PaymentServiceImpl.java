@@ -3,7 +3,6 @@ package edu.unimag.payment.service.impl;
 import edu.unimag.payment.model.Payment;
 import edu.unimag.payment.repository.PaymentRepository;
 import edu.unimag.payment.service.PaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +14,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
 
-    @Autowired
     public PaymentServiceImpl(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
     }
