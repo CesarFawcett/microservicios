@@ -168,6 +168,20 @@ services:
         condition: service_healthy
     networks:
       - microservices-net
+    
+  promtail:
+    image: grafana/promtail:2.9.0 
+    container_name: promtail
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro 
+      - /var/run/docker.sock:/var/run/docker.sock:ro              
+      - ./promtail-config.yaml:/etc/promtail/config.yaml 
+    command: -config.file=/etc/promtail/config.yaml
+    networks:
+      - microservices-net
+    depends_on:
+      loki:
+        condition: service_healthy # Promtail debe iniciar después de Loki
 
   mongo:
     image: mongo:5
@@ -197,14 +211,30 @@ services:
       timeout: 10s
       retries: 5
       start_period: 20s
-
+  
+  loki:
+    image: grafana/loki:2.9.0 
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yaml:/etc/loki/config.yaml 
+    command: -config.file=/etc/loki/config.yaml
+    networks:
+      - microservices-net
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3100/ready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
   prometheus:
     image: prom/prometheus
     container_name: prometheus
     ports:
-      - "9070:9090" # Puerto para la UI de Prometheus
+      - "9070:9090" 
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml # Monta el archivo de configuración
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command: --config.file=/etc/prometheus/prometheus.yml
     networks:
       - microservices-net
@@ -223,8 +253,9 @@ services:
     networks:
       - microservices-net
     depends_on:
-      - prometheus # Grafana depende de Prometheus
-      - zipkin # Grafana también puede conectarse a Zipkin para trazas
+      - prometheus 
+      - zipkin 
+      - loki
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001/api/health"]
       interval: 30s
@@ -239,6 +270,9 @@ volumes:
   inventory_pgdata:
   payment_pgdata:
   mongo-data:
+  grafana_data:
+  loki_data:
+  
 
 networks:
   microservices-net:

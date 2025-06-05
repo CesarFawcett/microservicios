@@ -20,6 +20,7 @@ public class RequestPathLoggingFilter implements GlobalFilter, Ordered {
     private static final Logger logger = LoggerFactory.getLogger(RequestPathLoggingFilter.class);
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
@@ -40,17 +41,13 @@ public class RequestPathLoggingFilter implements GlobalFilter, Ordered {
         // Continuar con la cadena de filtros
         return chain.filter(exchange)
                 .doFinally(signalType -> {
-                    // Opcional: Registrar información después de que la respuesta ha sido enviada
-                    // Esto puede ser útil para ver el estado final o el tiempo de procesamiento.
-                    // Para este ejemplo, solo logeamos la solicitud entrante.
+
                 });
     }
 
     @Override
     public int getOrder() {
-        // Define el orden de ejecución del filtro.
-        // Ordered.HIGHEST_PRECEDENCE asegura que este filtro se ejecute muy temprano
-        // en la cadena de filtros, lo que es bueno para el logging de entrada.
+
         return Ordered.HIGHEST_PRECEDENCE;
     }
 }

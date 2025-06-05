@@ -1,0 +1,42 @@
+# promtail-config.yaml
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml # Archivo para guardar las posiciones de lectura de logs
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push # URL de tu servicio Loki dentro de Docker Compose
+
+scrape_configs:
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: docker-logs # Etiqueta común para todos los logs de Docker
+          __path__: /var/lib/docker/containers/*/*log # Patrón para logs de contenedores Docker
+    pipeline_stages:
+      # Analizar los logs JSON de Docker (stdout/stderr)
+      - json:
+          expressions:
+            stream: stream
+            tag: $.tag
+            log: log
+      # Eliminar el campo "tag" y usar "stream" como etiqueta
+      - drop:
+          source: tag
+      - labelallow:
+          - stream # Mantener la etiqueta 'stream' (stdout/stderr)
+      # Etiquetar los logs con el nombre del contenedor
+      - regex:
+          expression: "/var/lib/docker/containers/(?P<container_id>.*)/"
+          source: __path__
+      - label:
+          container_id:
+      - dockermode:
+          host: /var/run/docker.sock
+          match_all: true # Coincidir con todos los contenedores descubiertos por Docker
+          label_blacklist: [ "image_name", "container_name" ] # Si quieres evitar ciertas etiquetas
+          # Más opciones de dockermode si necesitas filtrar o añadir más etiquetas
