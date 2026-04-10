@@ -1,0 +1,22 @@
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# Maven/Gradle build outputs
+**/target/
+**/build/
+**/bin/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Optional: Docker related
+.docker/
